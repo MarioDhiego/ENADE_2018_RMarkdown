@@ -1,0 +1,813 @@
+---
+title: '**ENADE-2018 (CESUPA): Diagnóstico de Desempenho em Direito**'
+author:
+- name: MÁRIO VALENTE
+- name: CARLOS PAIXÃO
+- name: BEATRIZ SALIM
+- name: AURELIANO SANTOS
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    highlight: textmate
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+    toc_depth: 5
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+institute: FACTTOR CONSULTORIA 2021
+---
+
+# Prefácio
+
+<br>
+
+Este relatório foi planejado para gerar informações e contribuir para um melhor planejamento das Unidades Educacionais(centros DE Ensino Superior, faculdades e universidades), visando à melhoria de desempenho dos estudantes nas edições futuras do ENADE. Os conteúdos e resultados são oriundos dos documentos oficiais constantes nos microdados divulgados pelo Inep, que podem ser baixados do endereço [(INEP, 2018)](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enade).
+
+<br>
+
+No presente estudo, busca-se, modelar a probabilidade de acertos das questões (itens) que compõem a prova, considerando-se a proficiência do estudante a partir da dificuldade e capacidade de discriminação dos itens e da probabilidade de acerto casual. Por permitir uma avaliação do conhecimento efetivamente dominado pelo estudante em cada item, esta iniciativa possibilita intervenções e ações pontuais de correção no processo de ensino-aprendizagem, de modo a identificar lacunas que compreendam possíveis deficiências de aprendizagem.
+
+<br>
+
+Espera-se, portanto, contribuir com a área de educação em diversos cursos com a busca de instrumentos alternativos para aferição da situação atual do ensino superior no Pará, consubstanciada na avaliação do desempenho acadêmico dos estudantes (proficiência), de modo a avaliar, detalhadamente, a situação encontrada em cada tipo de conhecimento que integra os componentes dos cursos em análise.  
+
+
+# **Exame Nacional de Desempenho dos Estudantes (ENADE)** {.tabset .tabset-fade}
+## O Que é o ENADE?
+
+<br>
+
+O Exame Nacional de Desempenho dos Estudantes (ENADE) é um dos pilares da avaliação do sistema Nacional de Avaliação da Educação Superior (SINAES), criado pela **Lei n°10.861**, de 14 de abril 2004. Além do ENADE, os processos de avaliação de Cursos de graduação e de Avaliação Institucional constituem o tripé avaliativo do SINAES, os resultado desses instrumentos avaliativos, reunidos, permitem conhecer, em profundidade, o modo de funcionamento e a qualidade dos cursos e instituições de Educação Superior(IES) de todo o Brasil.
+
+- O ENADE é uma prova aplicada anualmente aos alunos (ingressantes e concluintes) de cursos de graduação, em areas definidas pelo Ministério da Educação(MEC) e é realizado pelo INEP.
+
+- O objetivo do ENADE e avaliar o desempenho dos estudantes com relação aos conteúdos programáticos das diretrizes curriculares dos curso de graduação e o desenvolvimento de competências e habilidades necessárias à formação geral e profissional.
+
+- A prova do ENADE/2018 de acordo com o art. 6° da Portaria Inep n°444, com duração de 4 horas, apresentou um componente de avaliação na **Formação Geral(FG)**, comum aos cursos de todas as áreas e um **Componente Específico(CE)** de acada área.
+
+- A parte referente ao **CE** contribui com **75%** da nora final, equanto a parcela, referente a FG, contribui com **25%**, em consonância com o número de questões da prova, 30 e 10, respectivamente. Os conceitos utilizados no ENADE variam de 1 a 5, e, à medida que esse valor aumenta, melhor terá sido o desempenho no exame. 
+
+
+## Componentes do ENADE
+
+- A nota final do estudante é obtida pela média ponderada das notas em cada componentes.
+
+### Formação Geral(FG)
+
+- 8 (oito) questões objetivas com peso idêntico, perfazendo 100%. Assim, a nota bruta das questões objetivas de FG é a proporção de acertos dessas questões.
+
+- 2 (duas) questões discursivas, cuja correção leva em consideração o conteúdo, com peso de 80%, e aspectos referentes à Lingua Portuguesa com peso de 20% distribuídos sa seguinte maneira: Aspectos Ortográficos (30%), Aspectos Textuais (20%), Aspectos Morfossintáticos e Vocabulares (50%). A nota das questões discursivas de Formação geral é a média simples das notas das duas questões discursivas.
+
+
+### Conhecimento Específico(CE)
+
+- 27 (vinte e sete) questões objetivas, com peso idêntico. Assim, a nota das questões de conhecimento específico é a proporção de acertos destas questões.
+- 3 (três) questões discursivas nas quais 100% da nota referem-se ao conteúdo. A nota das questões discursivas de conhecimento específico é a média simples das notas dessas 3 questões.
+
+
+As notas dos dois componentes, de Formação Geral e de Conhecimento Específico, são então arredondadas à primeira casa decimal. Para a obtenção da nota final do estudante, as notas dos dois componentes foram ponderadas por pesos proporcionais ao número de questões: 25% para FG e 75% para CE. esta nota foi também arredondada a uma casa decimal.
+
+
+# **TRI em Avaliação Educacional** 
+## Referencial Teórico
+
+No brasil, alguns trabalhos abordaram a Teoria da Resposta ao Item (TRI) para
+avaliação da proficiência com microdados do ENADE.
+
+- Francisco(2005), realizou um estudo de caso por meio da aplicação da TRI, com a finalidade de
+verificar o desempenho dos alunos formandos do curso de Matemática da Universidade
+Estadual do Centro-Oeste (UNICENTRO), em Guarapuava-PR, no período de 2000 até 2003,
+no Exame Nacional de Cursos (ENC);[1](https://acervodigital.ufpr.br/bitstream/handle/1884/2349/TRI_FINAL.pdf?sequence=1&isAllowed=y)
+
+- Oliveira(2006), utilizou a TRI para proceder a uma anÁlise das propriedades psicométricas
+da prova do ENADE de 2004, aplicada aos alunos dos cursos de medicina;[2]()
+
+
+- Nogueira (2008), aplicou a TRI para avaliar as questões da prova de formação geral (FG)
+do ENADE, em especial aquelas que envolvem conceitos estatísticos, visando estimar a proficiência dos estudantes nos conteúdos avaliados e o ajuste dos itens ao modelo de Rasch;[3]()
+
+
+- Primi et al.(2010), aplicaram a TRI aos dados do ENADE de psicologia de 2006, para determinar os pontos de corte, formamando grupos de competências requeridas para a resolução de itens;[4]()
+
+
+- Coelho et al.(2014), utilizaram três conjuntos de dados, dentre eles respostas do curso de estatística do ENADE de 2009 via TRI;[5]()
+
+- Scher et al.(2014), analisaram a prova do ENADE de 2009 do curso de Administração por meio da TRI;[6](https://core.ac.uk/download/pdf/30408247.pdf)
+
+
+- Lopes e Vendramini (2015), avaliaram as propriedades psicométricas da prova de Pedagogia do ENADE, aplicada em 2005, com o modelo de Rasch da TRI;[7](https://www.scielo.br/pdf/aval/v20n1/1414-4077-aval-20-01-00027.pdf)
+
+
+- Camargo et al.(2016), mensuraram a proficiência dos estudantes do curso de Ciências Contábeis no ENADE utilizando TRI;[8](http://www.repec.org.br/repec/article/view/1401/1183)
+
+- Spenassato e Tezza (2019), apresentaram  as  vantagens da utilização da TRI, em conjunto com a análise das questões objetivas do ENADE 2014 para o   curso   de Engenharia   da   Computação, comparando a dificuldade com os índices de facilidade dos itens divulgado no relatório da área pelo INEP(2016).[9](https://seer.uscs.edu.br/index.php/revista_informatica_aplicada/article/view/6984/3049)
+
+
+## Escala e Interpretação da TRI
+
+- A especificação das habilidades na matriz de cada área possibilita realizar interpretações mais precisas sobre o desempenho dos avaliados. Para isso, é fundamental explicitar qual a magnitude e/ou escalados resultados, escolhendo alguns intervalos de proficiência para identificar as habilidades cognitivas absorvidas pelos candidatos naquele intervalo.
+
+- O termo "item", em substituição ao "questão", é o padrão em avaliações e estudos educacionais. Especificamente, um item deve ser preparado para avaliar uma única habilidade(em outras situações, denominada de tópico ou descritor).Portanto, os itens estão intrinsecamente ligados à matriz de referência do exame.
+
+- Assim como nas principais avaliações do Brasil e exterior, os resultados de desempenho dos avaliados no ENADE são obtidos apartir da utilização da **Teoria da Resposta ao Item (TRI)**.
+
+- Essa teoria surgiu da necessidade de superar as limitações presentes na apresentação de resultados somente através de percentuais de acertos e médias desses percentuais, medidas adotadas na denominada **Teoria Clássica dos Testes(TCT)**.
+
+- O foco na TRI passa a ser os itens,e não simplesmente o número ou percentual de acertos.Cada item do ENADE, além de medir uma única habilidade, deve ter características estatísticas boas, deforma que possam realmente mensurar melhor as proficiências dos examinados.
+
+
+- Também é importante explicitar que as respostas aos itens são dicotomizadas(certo/errado) para aplicação da TRI no ENAD, de forma que não faz diferença qual alternativa incorreta o candidato marque,o resultado será sempre o mesmo.
+
+
+## O Que é a TRI?
+
+- É uma metodologia estatística que modela a probabilidade(um valor entre zero e um) de um particular indivíduo responder corretamente a um determinado item, através de uma função em forma de "S"(denominada de função Logística).
+
+- Cada item tem suas próprias características, que denominaremos parâmetros; cada indivíduo tem um certo "valor" de proficiência na área avaliada,que será a sua nota TRI.
+
+- Assume-se basicamente que, quanto maior a proficiência, maior a probabilidade de acerto do item.
+
+## Modelo Estatístico da TRI 
+
+- Neste estudo, é utilizado um modelo logístico unidimensional de 3 parâmetros (3pl), representado pelo traço latente **Conhecimento em Curso de Graduação**, considera-s euma única população, isto é, os alunos de graduação que realizará, a prova do ENADE/2018. 
+
+
+$$ P(Y_{ij}=1|\theta_{j}, \varsigma_{i})= c_{i}+(1-c_{i})\frac{1}{1+e^{-Da_{i}}(\theta_{j}-b_{i})}$$
+Com $i=1,2,...,n$ onde:
+
+- **$Y_{ij}$**: variável dicotômica que assume os valore 1(um), quando o indivíduo $j$, no estudo em questão, responde corretamente o item, ou assume 0 (zero) caso contrário. 
+
+- **$\theta_{j}$:** representa o traço latente (parâmetro de habilidade) do j-ésimo aluno pesquisado;
+
+- **Parâmetro de Discriminação($a_{1}$)**: mede a capacidade que cada item possui para diferenciar aqueles participantes que sabem o conteúdo do item daqueles participantes que não o dominam, e está associado à inclinação da curva.
+
+- **Parâmetro de Dificuldade($b_{i}$)**: mede a dificuldade associada ao conteúdo do item, e quanto maior seu valor, mais difícil será o conteúdo do item. Ele é expresso na mesma escala da proficiência(habilidade). E muma prova de qualidade devemos ter itens de diferentes níveis de dificuldade para avaliar adequadamente os participantes em todos os níveis de conhecimento. Para valores de proficiência dos alunos apartir do valor de "$b_{i}$" do item, a probabilidade de acertar o item é maior do que a probabilidade de errar;
+
+- **Parâmetro de Acerto Casual($c_{i}$)**: em provas de múltipla escolha, um participante que não domina o conteúdo de um determinado item da prova pode responder corretamente a esse item por acerto casual. Com isso,esse parâmetro representa a probabilidade de um participante de baixa proficiência acertar o item de forma casual.
+
+- **($D_{i}$)**: é um faor de escala. igual a 1 se os parâmetros dos itens estimados na métrica da logística, igual a 1,7 se os paraâmetros dos itens são estimados na métrica da ogiva normal.
+
+
+## Etapas de Análise dos Dados
+
+- Obtenção da base pública (microdados) do ENADE/2018 no sítio do INEP;
+- Seleção dos Atributos (colunas);
+- Verificação dos dados, a fim de identificar dados nulos ou inválidos;
+- Remoção dos dados nulos ou considerados inválidos;
+- Análise dos dados, incluindo as estatísticas;
+- Geração de Gráficos e Mapas;
+
+# **Desempenho do Curso de Direito** 
+## Objetivo Geral
+
+Mensurar o Desempenho (proficiência) dos Estudantes do curso de DIREITO no ENADE por meio da Teoria da Resposta ao Item (TRI), indicando perspectivas de uso dos resultados para o aprimoramento do Projeto Político Pedagógico do CESUPA.
+
+## Objetivos Específicos
+
+- Identificar qual o conhecimento especificamente em Direito, dominado pelos alunos;
+- Comparar a dificuldade da prova em relação ao conhecimento (proficiência) do grupo de estudantes;
+- Comprar os Resultados do ENADE/2018 do curso de Direito CESUPA versus Brasil;
+- Discutir as contribuições da Avaliação em Larga Escala para o processo de formação dos estudantes dos cursos de graduação do CESUPA.
+
+
+## Participantes
+A população do estudo é constituída pelos alunos concluintes do curso de graduação em Direito do CESUPA no Pará. Foram inscritos para aprova do ENADE/2018 um total de 250 estudantes, sendo a prova resolvida por 245 estudantes concluintes.
+
+## Instrumento Avaliativo
+
+- Para o estudo foram consideradas, exclusivamente, as questões objetivas, ou seja 35(trinta e cinco) questões, (oito de formação geral e vinte e sete de conhecimento específico).
+
+- Os microdados coletados forma dicotomizados, ou seja, como as resposta dos microdados disponibilizados pelo INEP são apresentados na forma de alternativas A, B, C, D ou E, estas foram comparadas ao gabarito. Assim, as respostas corretas receberam o valor 1(um) e as respostas erradas foram sisbustituídas por 0(zero).
+
+## Recursos Computacionais
+
+Para mensuração do desempenho (proficiência) dos estudantes no ENADE foi implementada um script no software R-Project versão 4.0 e um ambiente de desenvolvimento integrado chamado Rstudio versão 1.1.5 com uso dos pacotes:
+
+
+### Carregando os Pacotes
+#### Pacotes para TRI
+
+Para Mensuração do Desempenho (proficiência via TRI) dos estudantes de Direito matriculados no CESUPA que fizeram a prova do ENADE EM 2018, foi necessário os seguintes pacotes.
+
+```{r Pacotes1, message=FALSE, warning=FALSE}
+library(mirt)    # Multidimensional Item Response Theory 
+library(ltm)     # Latent Trait Models under IRT
+library(irtoys)  # A Collection of Functions Related to Item Response Theory (IRT)
+library(psych)   # Procedures for Psychological, Psychometric, and Personality Research
+```
+
+Para o desenvolvimento de um ambiente de viasualização dos resultados, foi utilizado os recursos do pacote RMarkdown com alguns recuros extras.
+
+#### Pacotes para RMarkdown
+```{r Pacotes2, message=FALSE, warning=FALSE}
+library(dplyr)       # A Grammar of Data Manipulation 
+library(DT)          # A Wrapper of the JavaScript Library 'DataTables' 
+library(rstatix)     # Pipe-Friendly Framework for Basic Statistical Tests 
+library(tinytex)     # Fazer Fórmulas via Latex  
+library(knitr)       # A General-Purpose Package for Dynamic Report 
+library(kableExtra)  # Construct Complex Table with 'kable' and Pipe Syntax 
+library(formattable) # Create 'Formattable' Data Structures 
+library(htmltools)   # Tools for HTML 
+library(rmarkdown)   # Dynamic Documents for R
+library(distill)     # RMarkdown Format for Scientific and Technical Writing 
+```
+
+
+#### Pacotes para Viasualização Gráfica
+
+Para a visualização gráfica dos microdados sobre o Enade 2018, serão utilizados vários pacotes combinados.
+
+```{r Pacotes3, message=FALSE, warning=FALSE}
+library(ggplot2)    
+library(plotly) 
+library(ggpubr) 
+library(gridExtra)
+library(ggthemes)
+```
+
+
+
+```{r Leitura, echo=FALSE, message=FALSE, warning=FALSE}
+
+setwd("C:/Users/mario Dhiego/Documents/ENADE_2018_RMarkdown")
+Base_Completa=read.table("microdados_enade_2018.txt", 
+                         header=TRUE, 
+                         sep=";", 
+                         dec=",", 
+                         colClasses=c(NT_OBJ_FG="numeric"))
+```
+
+
+```{r Filtro, echo= FALSE, message=FALSE, warning=FALSE}
+Base = Base_Completa %>% dplyr::select (NT_OBJ_FG,
+                                        CO_GRUPO,
+                                        CO_REGIAO_CURSO,
+                                        QE_I02,
+                                        CO_TURNO_GRADUACAO, 
+                                        TP_SEXO,
+                                        NU_IDADE)
+DIREITO = Base %>% filter (CO_GRUPO == 2)
+DIREITO = DIREITO %>% mutate(CURSO = case_when(CO_GRUPO== 2 ~ "Direito"))
+```
+
+
+
+
+```{r Transormacao, echo=FALSE, message=FALSE, warning=FALSE}
+DIREITO = DIREITO %>% mutate(REGIAO = case_when(CO_REGIAO_CURSO == 1 ~ "Norte",
+                                                CO_REGIAO_CURSO == 2 ~ "Nordeste",
+                                                CO_REGIAO_CURSO == 3 ~ "Sudeste",
+                                                CO_REGIAO_CURSO == 4 ~ "Sul",
+                                                CO_REGIAO_CURSO == 5 ~ "Centro-Oeste"))
+
+DIREITO = DIREITO %>% mutate(RACA = case_when(QE_I02 == "A" ~ "Branca",
+                                              QE_I02 == "B" ~ "Preta",
+                                              QE_I02 == "C" ~ "Amarela",
+                                              QE_I02 == "D" ~ "Indigena",
+                                              QE_I02 == "E" ~ "ND"))
+
+DIREITO = DIREITO %>% mutate(TURNO = case_when(CO_TURNO_GRADUACAO == "1" ~ "Matutino",
+                                               CO_TURNO_GRADUACAO == "2" ~ "Vespertino",
+                                               CO_TURNO_GRADUACAO == "3" ~ "Integral",
+                                               CO_TURNO_GRADUACAO == "4" ~ "Noturno"))
+
+DIREITO = DIREITO %>% mutate(SEXO = case_when(TP_SEXO == "F" ~ "Feminino",
+                                              TP_SEXO == "M" ~ "Masculino"))
+```
+
+
+```{r Removendo, echo=FALSE, message=FALSE, warning=FALSE}
+
+DIREITO = DIREITO[,-c(2,3,4,5,6)]
+names(DIREITO)[1] = "NOTAS"
+
+DIREITO %>% 
+  select(NOTAS) %>% 
+  group_by(NOTAS) %>% 
+  summarise(total = n())
+
+DIREITO %>% 
+  select(REGIAO) %>% 
+  group_by(REGIAO) %>% 
+  summarise(total = n())
+
+DIREITO %>% 
+  select(RACA) %>% 
+  group_by(RACA) %>% 
+  summarise(total = n())
+
+DIREITO %>% 
+  select(TURNO) %>% 
+  group_by(TURNO) %>% 
+  summarise(total = n())
+
+DIREITO %>% 
+  select(SEXO) %>% 
+  group_by(SEXO) %>% 
+  summarise(total = n())
+```
+
+
+
+## Visualização Gráfica Nacional
+
+- A distribuição das notas dos alunos matriculados nos cursos de Direito em 2018, referentes aos microdados do Enade para todas as unidades de federação no Brasil, estão disstribuídos por Raça e Região.
+
+
+### Análise das Notas dos Alunos por **Raças**
+
+
+```{r grafico1, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_geom_density1=ggplot(dados,aes(NOTAS,fill=RACA))+
+  geom_density(alpha=0.6)+
+  xlab("Nota dos Alunos")+
+  ylab("Densidade")+
+  ggtitle("Densidade das Notas dos Alunos por Raças e Regiões")+
+  facet_grid(~REGIAO)
+ggplotly(grafico_geom_density1)
+```
+
+
+
+
+```{r grafico2, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_histograma1 = ggplot(dados, aes(x=NOTAS,fill=RACA))+ 
+  geom_histogram() +
+  ggtitle("Histograma das Notas dos Alunos por Raças e Regiões-Frequência Simples")+
+  xlab("Notas") +
+  ylab("Frequência simples") +
+  facet_grid(~REGIAO)
+ggplotly(grafico_histograma1)
+```
+
+
+
+
+```{r grafico3, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_boxplot1 = ggplot(dados, aes(x=RACA,y=NOTAS,fill=RACA)) + 
+  geom_boxplot() +
+  ggtitle("Box-plot das Notas dos Alunos por Raças e Regiões") +
+  xlab("Raça") +
+  ylab("Notas") +
+  facet_grid(~REGIAO)
+ggplotly(grafico_boxplot1)
+```
+
+
+### Análise das Notas dos Alunos por **Regiões**
+
+
+```{r grafico4, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_geom_density2=ggplot(dados,aes(NOTAS,fill=REGIAO))+
+  geom_density(alpha=0.6)+
+  xlab("Notas")+
+  ylab("Densidade")+
+  ggtitle("Densidade de Alunos por Regiões e Raças")+
+  facet_grid(~RACA)
+ggplotly(grafico_geom_density2)
+```
+
+
+
+
+```{r grafico5, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_histograma2 = ggplot(dados, aes(x=NOTAS,fill=REGIAO)) + 
+  geom_histogram() +
+  ggtitle("Histograma das Notas dos Alunos por Regiões e Raças-Frequência Simples") +
+  xlab("Notas") +
+  ylab("Frequência Simples") +
+  facet_grid(~RACA)
+ggplotly(grafico_histograma2)
+```
+
+
+
+```{r grafico6, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_boxplot2 = ggplot(dados, aes(x=REGIAO,y=NOTAS,fill=REGIAO)) + 
+  geom_boxplot() +
+  ggtitle("Box-plot das Notas dos Alunos por Regiões e Raças") +
+  xlab("Região") +
+  ylab("Notas") +
+  facet_grid(~RACA)
+
+ggplotly(grafico_boxplot2)
+```
+
+### Análise das Notas dos Alunos por **Turnos**
+
+
+```{r grafico7, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_geom_density3=ggplot(dados,aes(NOTAS,fill=TURNO))+
+  geom_density(alpha=0.6)+
+  xlab("Notas")+
+  ylab("Densidade")+
+  ggtitle("Densidade de Alunos por Turnos e Raças")+
+  facet_grid(~RACA)
+
+ggplotly(grafico_geom_density3)
+```
+
+
+
+```{r grafico8, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_histograma3 = ggplot(dados, aes(x=NOTAS,fill=TURNO)) + 
+  geom_histogram() +
+  ggtitle("Histograma das Notas dos Alunos por Turnos e Raças-Frequência Simples") +
+  xlab("Notas") +
+  ylab("Frequência simples") +
+  facet_grid(~RACA)
+
+ggplotly(grafico_histograma3)
+```
+
+
+
+
+
+```{r grafico9, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_boxplot3 = ggplot(dados, aes(x=TURNO,y=NOTAS,fill=TURNO)) + 
+  geom_boxplot() +
+  ggtitle("Gráfico Box-plot das Notas dos Alunos por Turnos e Raças") +
+  xlab("Turnos") +
+  ylab("Notas") +
+  facet_grid(~RACA)
+
+ggplotly(grafico_boxplot3)
+```
+
+
+### Análise das Notas dos Alunos por **Turnos e Regiões**
+
+
+```{r grafico10, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_geom_density4=ggplot(dados,aes(NOTAS,fill=TURNO))+
+  geom_density(alpha=0.6)+
+  xlab("Notas")+
+  ylab("Densidade")+
+  ggtitle("Densidade de Alunos por Turnos e Regiões")+
+  facet_grid(~REGIAO)
+
+ggplotly(grafico_geom_density4)
+```
+
+
+
+```{r grafico11, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_histograma4 = ggplot(dados, aes(x=NOTAS,fill=TURNO)) + 
+  geom_histogram() +
+  ggtitle("Histograma das Notas dos Alunos por Turnos-Frequência Simples") +
+  xlab("Notas") +
+  ylab("Frequência simples") +
+  facet_grid(~REGIAO)
+
+ggplotly(grafico_histograma3)
+```
+
+
+
+
+
+```{r grafico12, echo=FALSE, message=FALSE, warning=FALSE}
+dados=DIREITO
+grafico_boxplot4 = ggplot(dados, aes(x=TURNO,y=NOTAS,fill=TURNO)) + 
+  geom_boxplot() +
+  ggtitle("Box-plot das Notas dos Alunos por Turnos e Regiões") +
+  xlab("Turnos") +
+  ylab("Notas") +
+  facet_grid(~REGIAO)
+
+ggplotly(grafico_boxplot4)
+```
+
+
+
+
+
+
+
+## Calibração dos Itens
+
+- A estimação dos parâmetros dos modelos baseados na Teoria da Resposta ao Item foi realizada pelo Método de **Máxima Verossimilhança Marginal**, com a aplicação conjunta de um processo interativo chamado de algoritmo **Newton-Raphson ou Scoring de Fisher**, conforme [ANDRADE et al. 2000](https://docs.ufpr.br/~aanjos/CE095/LivroTRI_DALTON.pdf).
+
+- Para a comparações entre os modelos gerados utilizou-se o Teste da Razão de Verossimilhança por meio da **Anova** e os critérios **AIC (Akaike Information Criterion)** e **BIC (Bayesian Information Criterion)**, além de serem produzidos os gráficos com as Curvas Características do Item, Curvas de Informação do Item e Função de Informação Total do Teste.
+
+
+## Aplicação: Enade 2018 no CESUPA
+### Análise dos Itens via TCT
+
+- Em avaliação educacional, TCT tem como elemento central a prova como um todo e seus resultados são expressos em escores bruto, ou seja, no número total ou no percentual de itens respondidos corretamente. As propriedades psicométricas dos itens de uma prova realacionam-se aos parâmetros a segui: índice de dificuldade, índice de discriminação e corelação biserrial [BOTGATTO e ANDRADE, 2012](http://www.fcc.org.br/pesquisa/publicacoes/eae/arquivos/1733/1733.pdf)
+
+- A análise do funcionamento de cada questão(item) em relação ao grupo de alunos respondentes, possibilitam:
+    - **Medir a qualidade e o funcionamento do item**; 
+    - **Verificar problemas teóricos-técnicos da avaliação/questões**; 
+    - **Traçar um perfil do aprendizado do grupo**
+    - **Verificar o nível de dificuldade da questão em relação aqueles grupos**
+
+- Apresenta-se alguns resultados importantes para a compreenção da posterior análise da prova do ENADE/2018 para o curso de graduação em Direito do CESUPA, de acordo com a tabela abaixo.
+
+
+**Tabela 01**. Percentual de Resposta por Tipo de Alternativa na Prova do ENADE/2018 do curso de Direito.
+
+
+---
+
+ | **Itens/Gabarito ** | **A**      | **B**     | **C**     |      **D** |     **E** | 
+ | :----:              | :----:     |:----:     | :----:    | :----:     | :----:    |
+ |    `01-C`           |  1.3       |  7.7      |  **81.2** |   9.0      |   0.9     |
+ |    `02-A`           |  **81.68** |  12.7     |  1.6      |   3.3      |   0.8     |    
+ |    `03-C`           |  8.6       |  1.2      |  **77.6** |   4.9      |   7.8     | 
+ |    `04-B`           |  5.3       |  **68.6** |  12.7     |   6.5      |   6.9     | 
+ |    `05-E`           |            |           |           |            |           | 
+ |      ...            |  ...       |  ...      |  ...      | ...        | ...       |
+ |    `32-D`           |            |           |           |            |           | 
+ |    `33-B`           |            |           |           |            |           | 
+ |    `34-C`           |            |           |           |            |           | 
+ |    `35-E`           |            |           |           |            |           | 
+
+---
+
+**Tabela 02**. Percentual de acertos por Tipo de Alternativa na Prova do ENADE/2018 do curso de Direito.
+
+---
+
+ | **Itens**          | **Erros**     | **($n_{1}$)** | **Acertos**    | **($n_{2}$)** | 
+ | :------------:     | :-----------: |:------------: | :------------: | :------------:| 
+ |    `Q01`           |      22.4     |  55           |  77,6          |   190         |
+ |    `Q02`           |      18,4     |  45           |  81,6          |   200         |          
+ |    `Q03`           |      22,4     | 55            |  77,6          |   190         |   
+ |    `Q04`           |      31,4     | 77            | 68,6           |   168         |   
+ |    `Q05`           |      34,3     | 84            | 65,7           |   161         |    
+ |      ...           |  ...          |  ...          |  ...           | ...           | 
+ |    `Q32`           |      78,8     | 193           | 21,2           |   52          |               
+ |    `Q33`           |     47,8      | 117           | 52,2           |  128          |               
+ |    `Q34`           |     77,6      | 190           | 22,4           |   55          |              
+ |    `Q35`           |     65,3      | 160           | 34,7           |   85          |              
+---
+
+
+- Nos resultados obtidos pelos respondentes (tabela 03), observa-se notas variando entre 9 a 27 acertos, de um total de 35 itens. Destaca-se que não ocorreu escore nulo (nenhum acerto), como também não existiram respondente que obtiveram escore total. A maioria acertou entre 16 e 21 questões. 
+
+**Tabela 03**. Descrição dos Escores Brutos para os itens na Prova do ENADE/2018 do curso de Direito.
+
+---
+
+ | **Estatística **    | **Formação Geral** | **Componente Específico** | **Nota Bruta** | 
+ | :----:              |         :----:     |           :----:          |      :----:    |      
+ |    `Nº de Itens`    |         8          |             27            |      35        |   
+ |    `Média`          |        6.1         |            12.3           |      18.4      |       
+ |    `Moda`           |         7          |            12             |      16        | 
+ |    `Mínimo`         |        1(12.8%)    |            4(14.8%)       |      9(27.5%)  | 
+ |    `Máximo`         |        8(100%)     |            19(70.4%)      |      27(77.1%) | 
+ |    `1º Quartil`     |        5(62.5%)    |            10(37%)        |      16(45.7%) | 
+ |    `2º Quartil`     |        7(87.5%)    |            14(51.9%)      |      21(60%)   | 
+
+---
+
+- As questõs aplicadas na prova do ENADE são avaliadas inicialmente quanto ao nível de facilidade. Para isso, verifica-se o percentual de acertos de cada questão da prova. A tabela 04 apresenta as classificações de questões segundo o percentual de acertos, considerando como **Ìndide de Facilidade**. 
+
+**Tabela 04**. Distribuição dos itens por Ìndice de Facilidade na Prova do ENADE/2018 do curso de Direito.
+ 
+ ---
+ 
+ | **Classificação ** | **Indice de Facilidade** | **Nº do Itens**                             | **Nº de Amostra** | 
+ | :------------:     |   :------------:         |     :------------:                          |  :------------:   |      
+ |    `Muito Fácil`   |     0.91 ou mais         |        9                                    |      1 (2.9%)     |   
+ |    `Fácil`         |     0.71 a 0.90          |  1,2,3,6,7,8,12,13,25                       |      9 (25.7%)    |       
+ |    `Moderado`      |     0.31 a 0.70          |  4,5,10,14,15,16,17,20,21,24,27,30,31,33,35 |      15 (42.9%)   | 
+ |    `Difícil`       |     0.11 a 0.30          |  11,18,19,23,26,28,29,32,34                 |      9(27.5%)     | 
+ |    `Muito Difícil` |     0.00 a 0.10          |            22                               |      1(2.9%)      | 
+
+---
+
+- As questões objetivas aplicadas na prova do ENADE devem ter um nível mínimo de poder de discriminação. Para ser considerada apta a avaliar os alunos
+
+
+
+**Tabela 05**. Distribuição dos itens por Ìndice de Discriminação na Prova do ENADE/2018 do curso de Direito.
+
+---
+
+ | **Classificação ** | **Indice de Discrimnação** | **Nº do Itens**                    | **Nº de Amostra** | 
+ | :------------:     |   :------------:           |     :------------:                 |  :------------:   |      
+ |    `Muito Bom`     |     0.40 ou mais           |        15                          |      1 (2.9%)     |   
+ |    `Bom`           |     0.30 a 0.39            |  1,2,4,5,7,11,17,20,24,25,28       |     11 (31.43%)   |       
+ |    `Médio`         |     0.20 a 0.29            |  3,12,13,14,27,29,31,33,34         |      9 (25.71%)   | 
+ |    `Fraco`         |     $ < 0.19$              |  6,8,9,10,16,18,19,22,23,26,32,35  |      12(34,29%)   | 
+
+---
+
+
+
+### Análise dos Itens via TRI
+#### Correlação Bisserial/Alpha de Cronbach
+
+- São apresentados os dados de correlação bisserial, sendo uma medida estatística da capacidade de discriminação do item, na medida em que verificar se um determinado item binário apresenta correlação significativa com o escore bruto resultante do conjunto dos itens do ENADE.
+
+- Para avaliar a qualidade do instrumento de medida (fidedignidade), foi aplicado o coeficiente alpha de Cronbach. 
+
+
+**Tabela 06**. Correlação Bisserial e Alpha de Cronbch para os itens na Prova do ENADE/2018 do curso de Direito.
+
+ | **Itens**    | **Correlação Bisserial $(r_{pb})$** |  **Alpha de Cronbach $(\alpha_{i})$** | 
+ |:------------:|          :-----------:            |             :------------:          |
+ |        `Q01` |           0.30                    |             0.62                    |         
+ |        `Q02` |           0.34                    |             0.61                    |       
+ |        `Q03` |           0.22                    |             0.62                    |        
+ |        `Q04` |           0.38                    |             0.61                    |         
+ |        `Q05` |           0.35                    |             0.62                    |        
+ |          ... |           .....                   |             ......                  |
+ |        `Q32` |           0.14                    |             0.62                    | 
+ |        `Q33` |           0.28                    |             0.62                    |
+ |        `Q34` |           0.23                    |             0.62                    |
+ |        `Q35` |           0.17                    |             0.63                    |
+
+- Foram eliminados 2 dos 35 itens analisados, que apresentaram coeficientes de correlação bisserial muito baixos, impossibilitando a convergência na estimação do modelo, ou seja, não permitiram a realização da calibração de parâmetros da TRI.
+
+#### Unidimensionalidade dos Itens
+
+- Os modelos da TRI pressupõem-se que todos os itens medem uma única habilidade. Apesar do desempenho humano ser multi-determinado, uma vez que mais de uma habilidade participa da execução de qualquer tarefa, para satisfazer o postulado da unidimensionalidade do teste, é suficiente admitir que haja um fator dominante responsável pelo desempenho de todos os itens do teste no ENADE [(LORD e HAMBLETON, 1982)](https://core.ac.uk/download/pdf/31153937.pdf).
+
+
+- A evidência de validade psicométrica de construto para a prova doi ENADE/2018, foi obtida a partir da **Análise Fatorial(AF)** dos 35 itens que compõem a prova. A medida de adequação da amostra de kaiser-Meyer-Olkin(KMO) para a AF, igual a 0.76, indicou um resultado satisfatório.
+
+
+
+**Tabela 07**. Teste de Confiabilidade para os itens na Prova do ENADE/2018 do curso de Direito.
+
+ |    **Testes**           | **Formação Geral**  |   **Componente Específico** |  **Nota Brura**  |
+ |    :------------:       |  :-----------:      |        :------------:       |   :------------: |
+ |  `Alpha de Crombach`    |           0.71      |             0.78            |       0.76       | 
+ |   `Teste de KMO`        |           0.72      |             0.73            |       0.76       |
+ |   `Teste de bartlett`   |    P-valor=0.001    |       P-valor=0.001         |  P-valor=0.001   |  
+ |   `MSA`                 |          > 0.70     |            > 0.70           |        > 0.70    |
+    
+
+- O teste de esfericidade de Bartlett que permite avaliar a hipótese de igualdade de variância-covariância no grupo estudado, isto é, que a matriz de correlação é uma matriz identidade, revelou que existe correlação entre as variáveis estudadas [(HAIR et al, 2005)](https://dlscrib.com/download/hair-j-f-an-aacute-lise-multivariada-de-dados-6-ordf-edi-ccedil-atilde-o-pdf_58e6753ddc0d603035da97f8_pdf)
+
+
+- A partir dos dados, análise da dimensionalidade do conjunto de itens foi realizada através da **Análise Fatorial de Informação Completa** [(MATOS e RODRIGUES, 2019)](https://repositorio.enap.gov.br/bitstream/1/4790/1/Livro%20An%C3%A1lise%20Fatorial.pdf). 
+
+
+#### calibração e Equalização dos Itens
+
+- O processo de estimação dos itens foi realizado em vários passos, estratégia utilizada para manter o maior número possível de itens na prova do ENADE. A qualidade dos itens foi avaliada considerando-se, principalmente, os valores referentes às estimativas dos parãmetros de discriminação e de dificuldade.
+
+
+- a tabela 06 apresenta os parâmetros de discriminação $a_{i}$, dificuldade $b_{i}$ dos itens avaliados. Tais parâmetros foram estimados utilizando a TRI, com o método de Máxima verossimilhança Marginal e a convergência dos dados foi testada pelo algoritmo **EM(Expection Maximization)** e **Newton Raphson**. 
+
+**Tabela 08**. Estimação dos parâmetros dos itens para o Modelo logístico (3pl) da prova do ENADE/2018 no curso de Direito.
+
+ | **Itens**    | **Discriminação $a_{i}$** |  **Dificuldade $b_{i}$** | 
+ |:------------:| :-----------:          |:------------:          |
+ |        `Q01` |           0.682        |          -1.994        |         
+ |        `Q02` |           1.018        |          -1.750        |       
+ |        `Q03` |           0.471        |          -3.084        |        
+ |        `Q04` |           1.184        |          -1.094        |         
+ |        `Q05` |           0.690        |          -1.042        |        
+ |          ... |           .....        |          ......        |
+ |        `Q32` |           0.085        |          **15.433**    | 
+ |        `Q33` |           0.432        |          -0.217        |
+ |        `Q34` |           0.453        |           2.857        |
+ |        `Q35` |           0.240        |          2.667         |
+
+
+- Os itens em que os alunos necessitam de mais conhecimento (**dificuldade $b_{i}$**) adquiridos para solucionar os problemas indicados nas situações problemas na parte específica da prova de Direito.
+    - **Item 32 (Direito Processual Penal)**
+    - **Item 26 (Direito do Trabalho)**
+    - **Item 22 (Direito Empresarial + Direito Adimistrativo)**
+    - **Item 18 (Teoria Geral do Estado)**
+    - **Item 19 (Direito Ambiental + Direito Processual Civil)**
+    
+- Os itens que conseguem separar (**discriminação $a_{i}$**) os alunos que possuem mais habilidaes dentro do estudo do Direito.
+    - **Item 15 (Direito Constitucional)**
+    - **Item 11 (Direito Humanos)**
+
+**Tabela 09**. Comparativo dos Escores da TRI para 5 alunos com 23 acertos na prova do ENADE/2018 no curso de Direito.
+
+ | **Itens**          | Conteúdo           |**Aluno $01$** | **Aluno $02$** | **Aluno $03$** | **Aluno $04$** | **Aluno $05$** |
+ |:-----:             | :-----:            |:------------: | :------------: | :------------: | :------------: | :------------: |
+ | `Q01`              | Transgênicos       | Acertou       | Acertou        | Acertou        | Acertou        | Errou          |
+ | `Q02`              | Economia           | Acertou       | Acertou        | Acertou        | Acertou        | Acertou        |
+ | `Q03`              | Arte/Ciência       | Acertou       | Acertou        | Acertou        | Acertou        | Acertou        |
+ | `Q04`              | Imigração          | Acertou       | Acertou        | Acertou        | Acertou        | Acertou        |
+ | `Q05`              | Àfrica             | Erro          | Acertou        | Errou          | Acertou        | Acertou        |
+ |  ....              | ....               |  .....        |  .....         |   .....        |  .....         | .....          |
+ | `Q32`              | Processual Penal   | Errou         | Erro           | Acertou        | Errou          | Errou          |
+ | `Q33`              | Direito  Penal     | Acertou       | Acertou        | Errou          | Acertou        | Acertou        |
+ | `Q34`              | Constitucional     | Errou         | Errou          | Acertou        | Acertou        | Errou          |
+ | `Q35`              | Constitucional +PP | Errou         | Acertou        | Errou          | Errou          | Errou          |
+ | `Score Bruto`      |                    | 23            | 23             | 23             | 23             | 23             | 
+ | `Score TRI(50,10)` |                    | 34.58         | 65.48          | 35.17          | 60.37          | 41.20          | 
+
+
+
+
+
+
+## Referências Bibliográficas
+### Software's
+
+- R DEVELOPMENT CORE TEAM. R4.0: A language and Enviornment for Statistical Computing, 2020. https://cran.r-project.org/bin/windows/base 
+- RSTUDIO. Rstudio: Integrated Development Environment for R (versão 1.2.5).
+https://rstudio.com/products/rstudio/download/#download
+
+
+### Packages
+
+- Allaire, JJ, Rich Iannone, Alison Presmanes Hill, and Yihui Xie. 2020. **Distill: R Markdown Format for Scientific and Technical Writing**. https://CRAN.R-project.org/package=distill.
+
+- Zhu, Hao. 2020. **kableExtra: Construct Complex Table with Kable and Pipe Syntax**. https://CRAN.R-project.org/package=kableExtra.
+
+
+- Hadley Wickham; Romain François;Lionel Henry; Kirill Müller. **dplyr: A Grammar of Data Manipulation**
+https://cloud.r-project.org/web/packages/dplyr/index.html.
+
+
+- Alboukadel Kassambara. **rstatix: Pipe-Friendly Framework for Basic Statistical Tests**
+https://cran.r-project.org/web/packages/rstatix/index.html.
+
+
+- Joe Cheng; Carson Sievert; Winston Chang; Yihui Xie; Jeff Allen. **htmltools: Tools for HTML**
+https://cran.r-project.org/web/packages/htmltools/index.html.
+
+
+- Phil Chalmers; Joshua Pritikin; Alexander Robitzsch; Mateusz Zoltak; KwonHyun Kim; Carl F. Falk; Adam Meade; Lennart Schneider; David King; Chen-Wei Liu; Ogreden Oguzhan. **mirt: Multidimensional Item Response Theory** https://cran.r-project.org/web/packages/mirt/index.html.
+
+- Dimitris Rizopoulos.**ltm: Latent Trait Models under IRT**
+https://cran.r-project.org/web/packages/ltm/index.html.
+
+- William Revelle. **psych: Procedures for Psychological, Psychometric, and Personality Research**
+https://cran.r-project.org/web/packages/psych/index.html.
+
+- Ivailo Partchev; Gunter Maris; Tamaki Hattori. **irtoys: A Collection of Functions Related to Item Response Theory (IRT)** https://cran.r-project.org/web/packages/irtoys/index.html.
+
+### Books
+
+- ANDRADE, D. F., TAVARES, H. R., VALLE, R. C. **Teoria da resposta ao item: conceitos
+e aplicações**. São Paulo, 2000. https://docs.ufpr.br/~aanjos/CE095/LivroTRI_DALTON.pdf
+  
+- BAKER, F. B. **The Basics of Item Response Theory**. 2 ed. USA, 2001. https://eric.ed.gov/?id=ED458219
+
+- Yihui Xie, J. J. Allaire, Garrett Grolemund. **R Markdown: The Definitive Guide**. https://bookdown.org/yihui/rmarkdown/.
+
+- Yihui Xie. **Dynamic Documents with R and knitr**,(Chapman & Hall/CRC The R Series) 2nd Edition.
+https://yihui.org/knitr/.
+
+- Field, A. P., Miles, J., & Field, Z. (2012). Discovering statistics using R. https://aedmoodle.ufpa.br/pluginfile.php/401852/mod_resource/content/5/Material_PDF/1.Discovering%20Statistics%20Using%20R.pdf
+
+
+# Considerações Finais
+
+- Este estudo teve como objetivo mensurar o desempenho(proficiência) no ENDE/2018, dos estudantes de Direito matriculados no CESUPA, por meio TRI. Apartir da estimação realizada com o modelo logistico de 2 parâmetros nos 35 itens da prova objetiva, verificou-se que, a prova não apresentou nem op domínio cognitivo compreendido pela escala. Este Resultado corrobora o baixo desempenho dos estudantes, apontado aspectos de fragilidades de aprendizagem. 
+
+
+# Sugestão Pedagógica 
+
+- Os resultados das avaliações somativas como a Aplicação de **Simulado** dará base de como a gestão acadêmica irá retornar aos alunos as devolutivas de um resultado não observado em uma prova até alcançar aprendizagem plea.
+
+- Os objetivos disciplinares e interdisciplinares devem estar presentes nas habilidades dos professores, assim como, a **Taxonomia de Bloom**, mobilizando competências aos alunos.  
+
+
+# Créditos
+
+**FATTOR CONSULTORIA EM ANÁLISE DE DADOS 2021**.
+
+
+* [Site](https://WWW.fattorconsultoria.com.br)
+* [facebook](https://www.facebook.com/fattorconsultoria)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
